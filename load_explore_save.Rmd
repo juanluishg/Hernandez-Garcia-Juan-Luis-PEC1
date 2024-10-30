@@ -1,0 +1,80 @@
+---
+title: "Load and explore dataset"
+author: "Juan Luis Hernández García"
+date: "2024-10-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Install dependencies
+
+```{r, echo=FALSE, message=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("SummarizedExperiment")
+```
+
+
+## Create data container (SummarizedExperiment)
+
+```{r}
+library(SummarizedExperiment)
+
+# Load the data
+file_path <- "2023-UGrX-4MetaboAnalystTutorial/ST000002_AN000002.txt"
+data <- readLines(file_path)
+
+# Parse file sections
+metabolite_data_start <- which(data == "MS_METABOLITE_DATA_START") + 1
+metabolite_data_end <- which(data == "MS_METABOLITE_DATA_END") - 1
+metabolite_table <- data[metabolite_data_start:metabolite_data_end]
+metabolite_table <- metabolite_table[-2]
+
+# Convert to data frame
+metabolite_df <- read.table(text = metabolite_table, header = TRUE, sep = "\t", row.names = 1)
+
+# Extract sample information
+sample_info_start <- which(grepl("#SUBJECT_SAMPLE_FACTORS", data)) + 1
+sample_info_end <- which(grepl("#COLLECTION", data)) - 1
+sample_info <- data[sample_info_start:sample_info_end]
+sample_info <- gsub("\\s+\\t", "\t", sample_info)
+sample_info <- gsub("\t-\t", "\t", sample_info)
+sample_info <- gsub("\\t$", "", sample_info)
+sample_df <- read.table(text = sample_info, sep = "\t", header = FALSE, col.names = c("Subject","SampleID", "Factors"))
+
+# Create SummarizedExperiment object
+se <- SummarizedExperiment(
+  assays = list(counts = as.matrix(metabolite_df)),
+  colData = sample_df,
+  rowData = DataFrame(metabolite = rownames(metabolite_df))
+)
+
+# Display structure
+se
+```
+
+## Data exploration
+
+```{r}
+
+```
+
+
+
+## Save data and metadata
+```{r}
+# Define file paths for saving
+se_file <- "intestinal_samples_pre_post_transplantation.Rda"
+metadata_file <- "intestinal_samples_pre_post_transplantation_metadata.Rda"
+
+# Save the SummarizedExperiment object
+save(se, file = se_file)
+
+# Save the metadata (sample information)
+save(sample_df, file = metadata_file)
+```
+
