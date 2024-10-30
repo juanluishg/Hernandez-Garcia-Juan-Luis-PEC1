@@ -44,7 +44,7 @@ sample_info <- data[sample_info_start:sample_info_end]
 sample_info <- gsub("\\s+\\t", "\t", sample_info)
 sample_info <- gsub("\t-\t", "\t", sample_info)
 sample_info <- gsub("\\t$", "", sample_info)
-sample_df <- read.table(text = sample_info, sep = "\t", header = FALSE, col.names = c("Subject","SampleID", "Factors"))
+sample_df <- read.table(text = sample_info, sep = "\t", header = FALSE, col.names = c("Subject","Sample", "Factors"))
 
 # Create SummarizedExperiment object
 se <- SummarizedExperiment(
@@ -60,9 +60,16 @@ se
 ## Data exploration
 
 ```{r}
-
+head(assay(se, "counts"))
 ```
 
+```{r}
+colData(se)
+```
+
+```{r}
+rowData(se)
+```
 
 
 ## Save data and metadata
