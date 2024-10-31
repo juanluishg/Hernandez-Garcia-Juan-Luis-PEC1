@@ -16,6 +16,7 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("SummarizedExperiment")
+BiocManager::install("ComplexHeatmap")
 ```
 
 
@@ -57,6 +58,7 @@ se <- SummarizedExperiment(
 se
 ```
 
+
 ## Data exploration
 
 ```{r}
@@ -69,6 +71,57 @@ colData(se)
 
 ```{r}
 rowData(se)
+```
+
+```{r}
+library(ggplot2)
+
+exp_matrix <- assay(se)
+lab1 <- exp_matrix["valine", ]
+lab2 <- exp_matrix["xanthine", ]
+
+metadata <- rownames(as.data.frame(colData(se)))
+
+df <- data.frame(Lab1 = lab1, Lab2 = lab2, Group = metadata)
+
+ggplot(df, aes(x = Lab1, y = Lab2, color = Group)) +
+  geom_point() +
+  labs(title = "Relación entre LabF_684508 y LabF_684512",
+       x = "Expresión de LabF_684508", y = "Expresión de LabF_684512") +
+  theme_minimal()
+```
+
+```{r}
+metabolite <- exp_matrix["uric acid", ]
+
+df <- data.frame(Metabolite = metabolite, Muestras = metadata)
+
+ggplot(df, aes(x = Muestras, y = Metabolite, fill = Muestras)) +
+  geom_boxplot() +
+  labs(title = "Acido urico en las distintas muestras",
+       x = "Muestra", y = "Acido urico") +
+  theme_minimal()
+
+```
+
+```{r}
+library(ComplexHeatmap)
+
+# Selecciona un subconjunto de genes
+metabolites_seleccionados <- c("uric acid","uridine","valine","xanthine","xylose")
+exp_sub <- exp_matrix[metabolites_seleccionados, ]
+
+# Normaliza o escala los datos si es necesario
+exp_sub <- t(scale(t(exp_sub)))
+
+# Crea el heatmap
+Heatmap(exp_sub, name = "Metabolites",
+        show_row_names = TRUE,
+        show_column_names = FALSE,
+        cluster_rows = TRUE,
+        cluster_columns = TRUE,
+        column_split = metadata)
+
 ```
 
 
