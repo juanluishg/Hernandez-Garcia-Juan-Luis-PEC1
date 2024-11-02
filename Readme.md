@@ -5,7 +5,7 @@ Autor: **Juan Luis Hernández García**
 ## Informes
 
 * [**Informe RMarkdown**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1/load_explore_save.html)
-* [**Informe PEC1**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1/PEC1-Informe.pdf)
+* [**Informe PEC1**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1/Hernandez-Garcia-Juan-Luis-PEC1.pdf)
 * [**Metadatos**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1/dataset_metadata.md)
 * [**Readme**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1)
 
