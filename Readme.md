@@ -6,6 +6,12 @@ Autor: **Juan Luis Hernández García**
 
 * [**Informe RMarkdown**](https://juanluishg.github.io/Hernandez-Garcia-Juan-Luis-PEC1/load_explore_save.html)
 
+## Graficos
+
+![](relacion.png)
+
+![](muestras.png)
+
 ## Estructura
 
 * **2023-UGrX-4MetaboAnalystTutorial**: Carpeta que contiene el dataset de [Metabolomic Workbench](https://github.com/nutrimetabolomics/metaboData?tab=readme-ov-file)
