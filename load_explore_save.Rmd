@@ -19,7 +19,6 @@ BiocManager::install("SummarizedExperiment")
 BiocManager::install("ComplexHeatmap")
 ```
 
-
 ## Create data container (SummarizedExperiment)
 
 ```{r}
@@ -86,9 +85,11 @@ df <- data.frame(Lab1 = lab1, Lab2 = lab2, Group = metadata)
 
 ggplot(df, aes(x = Lab1, y = Lab2, color = Group)) +
   geom_point() +
-  labs(title = "Relación entre LabF_684508 y LabF_684512",
-       x = "Expresión de LabF_684508", y = "Expresión de LabF_684512") +
+  labs(title = "Relación entre valine y xanthine",
+       x = "Expresión de valine", y = "Expresión de xanthine") +
   theme_minimal()
+
+ggsave("relacion.png")
 ```
 
 ```{r}
@@ -96,36 +97,17 @@ metabolite <- exp_matrix["uric acid", ]
 
 df <- data.frame(Metabolite = metabolite, Muestras = metadata)
 
-ggplot(df, aes(x = Muestras, y = Metabolite, fill = Muestras)) +
-  geom_boxplot() +
+ggplot(df, aes(x = Muestras, y = Metabolite)) +
+  geom_point() +
   labs(title = "Acido urico en las distintas muestras",
        x = "Muestra", y = "Acido urico") +
   theme_minimal()
 
+ggsave("muestras.png")
 ```
 
-```{r}
-library(ComplexHeatmap)
-
-# Selecciona un subconjunto de genes
-metabolites_seleccionados <- c("uric acid","uridine","valine","xanthine","xylose")
-exp_sub <- exp_matrix[metabolites_seleccionados, ]
-
-# Normaliza o escala los datos si es necesario
-exp_sub <- t(scale(t(exp_sub)))
-
-# Crea el heatmap
-Heatmap(exp_sub, name = "Metabolites",
-        show_row_names = TRUE,
-        show_column_names = FALSE,
-        cluster_rows = TRUE,
-        cluster_columns = TRUE,
-        column_split = metadata)
-
-```
-
-
-## Save data and metadata
+## Export data
+### Save data and metadata as Rda
 ```{r}
 # Define file paths for saving
 se_file <- "intestinal_samples_pre_post_transplantation.Rda"
@@ -136,5 +118,61 @@ save(se, file = se_file)
 
 # Save the metadata (sample information)
 save(sample_df, file = metadata_file)
+```
+
+### Save data as text
+```{r}
+count_matrix <- assay(se)
+write.table(count_matrix, file = "metaboliteData.txt", sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+```
+
+### Save metadata as markdown
+```{r}
+num_metabolite <- nrow(se)
+num_samples <- ncol(se)
+assay_names <- assayNames(se)
+column_metadata <- colnames(colData(se))
+row_metadata <- colnames(rowData(se))
+```
+
+```{r}
+fileConn <- file("dataset_metadata.md")
+
+cat(
+  "# Resumen de Metadatos del Dataset\n\n",
+  "## Información General\n",
+  "- **Número de metabolitos**: ", num_metabolite, "\n",
+  "- **Número de muestras**: ", num_samples, "\n\n",
+  
+  "## Assays Disponibles\n",
+  paste("- ", assay_names, collapse = "\n"), "\n\n",
+  
+  "## Metadatos de las Muestras (colData)\n",
+  paste("- ", column_metadata, collapse = "\n"), "\n\n",
+  
+  "## Metadatos de los Metabolitos (rowData)\n",
+  paste("- ", row_metadata, collapse = "\n"), "\n\n",
+  
+  "## Ejemplo de Datos\n",
+  "### Primeras Filas de la Matriz de Expresión\n\n",
+  "```{r}\n",
+  paste(capture.output(head(assay(se))), collapse = "\n"),
+  "\n```\n\n",
+  
+  "### Primeras Filas de los Metadatos de las Muestras\n\n",
+  "```{r}\n",
+  paste(capture.output(head(colData(se))), collapse = "\n"),
+  "\n```\n\n",
+  
+  "### Primeras Filas de los Metadatos de los Metabolitos\n\n",
+  "```{r}\n",
+  paste(capture.output(head(rowData(se))), collapse = "\n"),
+  "\n```\n\n",
+  
+  file = fileConn
+)
+
+close(fileConn)
+
 ```
 
