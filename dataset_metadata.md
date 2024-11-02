@@ -1,24 +1,24 @@
 # Resumen de Metadatos del Dataset
 
- ## Información General
- - **Número de metabolitos**:  142 
- - **Número de muestras**:  12 
+## Información General
+- **Número de metabolitos**:  142 
+- **Número de muestras**:  12 
 
- ## Assays Disponibles
- -  counts 
+## Assays Disponibles
+-  counts 
 
- ## Metadatos de las Muestras (colData)
- -  Subject
+## Metadatos de las Muestras (colData)
+-  Subject
 -  Sample
 -  Factors 
 
- ## Metadatos de los Metabolitos (rowData)
+## Metadatos de los Metabolitos (rowData)
  -  metabolite 
 
- ## Ejemplo de Datos
- ### Primeras Filas de la Matriz de Expresión
+## Ejemplo de Datos
+### Primeras Filas de la Matriz de Expresión
 
- ```{r}
+ ```
                         LabF_684508 LabF_684512 LabF_684516 LabF_684520
 1-monoolein                   6047        2902        1452        3428
 1-monostearin                 9771        6521        1302        2781
@@ -42,9 +42,9 @@
 2-monopalmitin                1457        1416        1275       14445 
 ```
 
- ### Primeras Filas de los Metadatos de las Muestras
+### Primeras Filas de los Metadatos de las Muestras
 
- ```{r}
+ ```
  DataFrame with 6 rows and 3 columns
                            Subject      Sample                Factors
                        <character> <character>            <character>
@@ -56,9 +56,9 @@ LabF_684524 SUBJECT_SAMPLE_FACTORS LabF_684524 Transplantation:Afte..
 LabF_684528 SUBJECT_SAMPLE_FACTORS LabF_684528 Transplantation:Afte.. 
 ```
 
- ### Primeras Filas de los Metadatos de los Metabolitos
+### Primeras Filas de los Metadatos de los Metabolitos
 
- ```{r}
+ ```
  DataFrame with 6 rows and 1 column
                                    metabolite
                                   <character>
